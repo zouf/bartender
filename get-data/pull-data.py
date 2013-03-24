@@ -78,7 +78,7 @@ def main():
         print 'At Drink ' + str(i)
         dumpData()
     except Exception as e:
-      print 'Exception at ' + str(i)
+      print 'Exception at ' + str(i) + ' ' + str(e)
       dumpData()
       pass
       
