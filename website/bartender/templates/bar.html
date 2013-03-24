@@ -7,20 +7,17 @@
 	</head>
 	<body style="font-family: 'Rufina', serif; padding: 10px;">
 		<h1>Princeton Bartender</h1>
-		<div>
-			<a href="">Gin + Tonic</a>
-		</div>
-		<div>
-			<a href="">Rum + Coke</a>
-		</div>
-		<div>
-			<a href="">Vodka + Soda</a>
-		</div>
+		<span style="float:left;">
+		<h2>Ingredients</h2>
 		{% for i in ingredients %}
-			{{ i.name }}<br/>
+			<a href="">{{ i.name }}</a><br/>
 		{% endfor %}
+	</span>
+		<span style="float:right;">
+		<h2>Drinks</h2>
 		{% for d in drinks %}
-			{{ d.name }}
+			<a href="">{{ d.name }}</a><br/>
 		{% endfor %}
+	</span>
 	</body>
 </html>
