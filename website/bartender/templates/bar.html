@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<link href="http://bootswatch.com/readable/bootstrap.min.css" rel="stylesheet">
+		<link href='http://fonts.googleapis.com/css?family=Rufina' rel='stylesheet' type='text/css'>
+		<title>Princeton Bartender</title>
+	</head>
+	<body style="font-family: 'Rufina', serif; padding: 10px;">
+		<h1>Princeton Bartender</h1>
+		<div>
+			<a href="">Gin + Tonic</a>
+		</div>
+		<div>
+			<a href="">Rum + Coke</a>
+		</div>
+		<div>
+			<a href="">Vodka + Soda</a>
+		</div>
+		{% for i in ingredients %}
+			{{ i.name }}<br/>
+		{% endfor %}
+		{% for d in drinks %}
+			{{ d.name }}
+		{% endfor %}
+	</body>
+</html>
