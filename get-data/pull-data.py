@@ -58,8 +58,11 @@ def pull_site(siteurl):
     
     
        
- # for sublist in BeautifulSoup(response,parse_only=SoupStrainer("ul")):
- #   print sublist
+def dumpData():
+  fp = open('AllDrinks.json','w')
+  json.dump(AllDrinks,fp)
+  fp = open('AllIngredients.json','w')
+  json.dump(AllIngredients,fp)
 
 
 def main():
@@ -67,21 +70,20 @@ def main():
   #this is what the website has for now
   NUM_DRINKS = 6218 
   
-  for i in xrange(0,NUM_DRINKS+1):
+  for i in xrange(1,NUM_DRINKS+1):
     try:
-      pull_site("http://www.webtender.com/db/drink/"+str(i))    
+      pull_site("http://www.webtender.com/db/drink/"+str(i))  
+      
+      if i %100 == 0:
+        print 'At Drink ' + str(i)
+        dumpData()
     except Exception as e:
-      fp = open('AllDrinks.json','w')
-      json.dump(AllDrinks,fp)
-      fp = open('AllIngredients.json','w')
-      json.dump(AllIngredients,fp)
+      print 'Exception at ' + str(i)
+      dumpData()
       pass
       
   print 'We are done. We have ' + str(len(AllDrinks)) + ' drinks. \n\nException:' + str(e)
-  fp = open('AllDrinks.json','w')
-  json.dump(AllDrinks,fp)
-  fp = open('AllIngredients.json','w')
-  json.dump(AllIngredients,fp)
+  dumpData()
 
 if __name__ == "__main__":
   main()
