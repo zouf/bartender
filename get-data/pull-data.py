@@ -27,11 +27,12 @@ def pull_site(siteurl):
   drinkName = soup.h1.get_text()
   theDrink['name'] = drinkName
   uls = soup.findAll("a","ingr")
-  
+
   category = soup.find(text=re.compile('Category:')).parent.parent.parent.find('td').find('small').get_text()
   serveIn = soup.find(text=re.compile('Serve in:')).parent.parent.parent.find('td').find('small').get_text()
   rating = soup.find(text=re.compile('Rating:')).parent.parent.parent.find('td').find('small').get_text()
   mixingInstructions = soup.find(text=re.compile('Mixing instructions:')).parent.parent.find('p').get_text()
+
   
   theDrink['url'] = siteurl
   theDrink['category'] = category
@@ -41,9 +42,9 @@ def pull_site(siteurl):
   
   theDrink['ingredients'] = []
   for link in  uls:
-    
     ingr = dict()
     ingrName = link.get_text()
+    
     ingr['name'] = ingrName
     #ridiculous hack since this website doesnt format its lists properly. Or beautifulsoup doesnt read them properly
     parentText = link.parent.get_text().split(ingrName)
@@ -53,7 +54,6 @@ def pull_site(siteurl):
     AllIngredients.append(ingrName)
     
     theDrink['ingredients'].append(ingr)
-    
   AllDrinks.append(theDrink)
     
     
@@ -64,23 +64,24 @@ def pull_site(siteurl):
 
 def main():
   i = 1
+  #this is what the website has for now
+  NUM_DRINKS = 6218 
   
-  while(True):
+  for i in xrange(0,NUM_DRINKS+1):
     try:
       pull_site("http://www.webtender.com/db/drink/"+str(i))    
-      i+=1
     except Exception as e:
-      print 'We are done. We have ' + str(len(AllDrinks)) + ' drinks. \n\nException:' + str(e)
-      
-      break
-    finally:
       fp = open('AllDrinks.json','w')
       json.dump(AllDrinks,fp)
       fp = open('AllIngredients.json','w')
       json.dump(AllIngredients,fp)
+      pass
       
-
-
+  print 'We are done. We have ' + str(len(AllDrinks)) + ' drinks. \n\nException:' + str(e)
+  fp = open('AllDrinks.json','w')
+  json.dump(AllDrinks,fp)
+  fp = open('AllIngredients.json','w')
+  json.dump(AllIngredients,fp)
 
 if __name__ == "__main__":
   main()
