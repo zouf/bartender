@@ -3,39 +3,239 @@
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<link href="http://bootswatch.com/readable/bootstrap.min.css" rel="stylesheet">
 		<link href='http://fonts.googleapis.com/css?family=Rufina' rel='stylesheet' type='text/css'>
+
+		<script type="text/javascript" src="js/jquery-1.3.1.min.js"></script>
+		<script type="text/javascript" src="js/longmenu.jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="js/longmenu.jquery.color.js"></script>
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <link rel="stylesheet" type="text/css" href="css/imagesliderdemo.css" />
+        <link rel="stylesheet" type="text/css" href="css/imagesliderstyle.css" />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300|Prata' rel='stylesheet' type='text/css' />
+		<script type="text/javascript" src="js/imageslider.modernizr.custom.26887.js"></script> 
+		
+		<noscript>
+			<link rel="stylesheet" type="text/css" href="css/imageslidernoscript.css" />
+		</noscript>
+
+		<!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
+
+	    <!-- Our CSS stylesheet file -->
+        <link rel="stylesheet" href="css/blockstyles.css" />
+
+		<!-- Font Awesome Stylesheet -->
+		<link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
+
+		<!-- Including Open Sans Condensed from Google Fonts -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700,300italic" />
+
+        <!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+
+        <link rel="shortcut icon" href="../favicon.ico"> 
+
+		<style type="text/css">
+			body {
+			padding:0;
+			margin:0 20px;
+			}
+
+			#sidebar {
+			height:400px;
+			overflow:hidden;
+			position:relative;
+			background-color:#eee;
+			}	
+
+			#menu {
+			width:100%;
+			list-style:none;
+			padding:0;
+			margin:0;
+			top:0;
+			position:relative;
+			height:100%;
+			width:300px;
+			}
+
+			#menu li {
+			padding:10px 0;
+			text-align:right;
+			display:block;
+			cursor:hand;
+			cursor:pointer;
+			}
+
+			#menu li a {
+			background:url() repeat #1f1f1f;
+
+			color:#ddd;
+			font-family:helvetica, arial, verdana;
+			font-size:9px;
+			font-weight:900;
+			display:inline;
+			padding:20px 8px 5px 20px;
+			text-decoration:none;
+			}
+
+			#menu li span {
+			font-family:georgia, arial;
+			font-size:9px;
+			color:#464646;
+			}
+
+		</style>
+
 		<title>Princeton Bartender</title>
-	</head>
-	<body style="font-family: 'Rufina', serif; padding: 10px;">
-		<h1>Princeton Bartender</h1>
 
 		<script type="text/javascript">
+		  function announce() {
+		  	$.post('/announce')
+		  }
+
 		  function transcribe(words) {
 
 		  	$.post(
 		  		'/order_drink', 
-		  		{"words": words})
+		  		{"words": words},
+		  		function(data) {
+		  			$('#drink').text(data['drink']).delay(1000)
+		  			.queue(function() {
+		  				$('#drink_to_make').val(data['drink']);
+		  				$('#make_drink_form').submit();
+		  			})
+
+		  		})
 
 		  	$('#mic').val(words);
-
-		    // document.getElementById("speech").value = words;
-		    // document.getElementById("mic").value = "";
-		    // document.getElementById("speech").focus();
 		  }
 		</script>
 
-		<input id="mic" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech>
+		<script type="text/javascript">
+			$(document).ready(function() {	
 
-		<span style="float:left;">
-		<h2>Ingredients</h2>
-		{% for i in ingredients %}
-			<a href="">{{ i.name }}</a><br/>
-		{% endfor %}
-		</span>
-		<span style="float:right;">
-		<h2>Drinks</h2>
-		{% for d in drinks %}
-			<a href="">{{ d.name }}</a><br/>
-		{% endfor %}
-		</span>
+				//Background color, mouseover and mouseout
+				var colorOver = '#31b8da';
+				var colorOut = '#1f1f1f';
+
+				//Padding, mouseover
+				var padLeft = '20px';
+				var padRight = '20px';
+				
+				//Default Padding
+				var defpadLeft = $('#menu li a').css('paddingLeft');
+				var defpadRight = $('#menu li a').css('paddingRight');
+					
+				//Animate the LI on mouse over, mouse out
+				$('#menu li').click(function () {	
+					//Make LI clickable
+					window.location = $(this).find('a').attr('href');
+					
+				}).mouseover(function (){
+					
+					//mouse over LI and look for A element for transition
+					$(this).find('a')
+					.animate( { paddingLeft: padLeft, paddingRight: padRight}, { queue:false, duration:100 } )
+					.animate( { backgroundColor: colorOver }, { queue:false, duration:200 });
+
+				}).mouseout(function () {
+				
+					//mouse oout LI and look for A element and discard the mouse over transition
+					$(this).find('a')
+					.animate( { paddingLeft: defpadLeft, paddingRight: defpadRight}, { queue:false, duration:100 } )
+					.animate( { backgroundColor: colorOut }, { queue:false, duration:200 });
+				});	
+				
+				//Scroll the menu on mouse move above the #sidebar layer
+				$('#sidebar').mousemove(function(e) {
+
+					//Sidebar Offset, Top value
+					var s_top = parseInt($('#sidebar').offset().top);		
+					
+					//Sidebar Offset, Bottom value
+					var s_bottom = parseInt($('#sidebar').height() + s_top);
+				
+					//Roughly calculate the height of the menu by multiply height of a single LI with the total of LIs
+					var mheight = parseInt($('#menu li').height() * $('#menu li').length);
+				
+					//I used this coordinate and offset values for debuggin
+					$('#debugging_mouse_axis').html("X Axis : " + e.pageX + " | Y Axis " + e.pageY);
+					$('#debugging_status').html(Math.round(((s_top - e.pageY)/100) * mheight / 2));
+						
+					//Calculate the top value
+					//This equation is not the perfect, but it 's very close	
+					var top_value = Math.round(( (s_top - e.pageY) /100) * mheight / 2);
+					
+					//Animate the #menu by chaging the top value
+					$('#menu').animate({top: top_value}, { queue:false, duration:500});
+				});
+			});
+		</script>
+
+	</head>
+	<body style="font-family: 'Rufina', serif; padding: 10px;">
+
+		<!--<div class="fs-slider" id="fs-slider">
+			<figure>
+				<img src="images/image1.jpg" alt="image01" />
+				<figcaption>
+					<h3>Budweiser</h3>
+					<p>Beauty is in the eye of the beer holder.  </p>
+				</figcaption>
+			</figure>
+			
+			<figure>
+				<img src="images/image2.jpg" alt="image02" />
+				<figcaption>
+					<h3>Corona Extra</h3>
+					<p>Give me a woman who loves beer and I will conquer the world.</p>
+				</figcaption>
+			</figure>
+			
+			<figure>
+				<img src="images/image3.jpg" alt="image03" />
+				<figcaption>
+					<h3>Maker’s Mark</h3>
+					<p>They say some of my stars drink whiskey, but I have found that ones who drink milkshakes don't win many ball games. </p>
+				</figcaption>
+			</figure>
+			
+			<figure>
+				<img src="images/image4.jpg" alt="image04" />
+				<figcaption>
+					<h3>Imbroglio</h3>
+					<p>Scenester fixie pickled, shoreditch fugiat enim craft beer retro mustache.</p>
+				</figcaption>
+			</figure>
+			
+			<figure>
+				<img src="images/image5.jpg" alt="image05" />
+				<figcaption>
+					<h3>Lissome</h3>
+					<p>Aute sunt aliqua do sapiente. Food truck ut sustainable thundercats four loko.</p>
+				</figcaption>
+			</figure>
+		</div>-->
+	
+
+		<h1>Princeton Bartender</h1>
+
+		<div style="width: 100%; text-align: center; padding-top: 50px;">
+			<span style="font-size: 30px;">
+				<input id="mic" onclick="announce();" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech style="width: 26px; -webkit-transform: scale(5.0, 5.0); border-radius: 5px;">
+			</span>
+		</div>
+
+		<div style="width: 100%; text-align: center; padding-top: 150px; font-size: 100px;">
+			<font id="drink"></font>
+		</div>
+
+		<form method="POST" action="/make_drink" id="make_drink_form">
+			<input type="hidden" name="drink_name" id="drink_to_make" />
+		</form>
+
 	</body>
 </html>
