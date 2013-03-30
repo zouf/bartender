@@ -7,17 +7,35 @@
 	</head>
 	<body style="font-family: 'Rufina', serif; padding: 10px;">
 		<h1>Princeton Bartender</h1>
+
+		<script type="text/javascript">
+		  function transcribe(words) {
+
+		  	$.post(
+		  		'/order_drink', 
+		  		{"words": words})
+
+		  	$('#mic').val(words);
+
+		    // document.getElementById("speech").value = words;
+		    // document.getElementById("mic").value = "";
+		    // document.getElementById("speech").focus();
+		  }
+		</script>
+
+		<input id="mic" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech>
+
 		<span style="float:left;">
 		<h2>Ingredients</h2>
 		{% for i in ingredients %}
 			<a href="">{{ i.name }}</a><br/>
 		{% endfor %}
-	</span>
+		</span>
 		<span style="float:right;">
 		<h2>Drinks</h2>
 		{% for d in drinks %}
 			<a href="">{{ d.name }}</a><br/>
 		{% endfor %}
-	</span>
+		</span>
 	</body>
 </html>

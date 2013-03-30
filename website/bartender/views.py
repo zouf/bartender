@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from bartender.models import Drink, Ingredient, IngredientForDrink
+from django.views.decorators.csrf import csrf_exempt
+import os, operator                           
 
 available_ingredients = [
 	'Whiskey',
@@ -10,9 +12,66 @@ available_ingredients = [
 	'Bloody Mary Mix',
 	'Gin']
 
+@csrf_exempt
+def order_drink(request):
+	if request.method == 'POST':
+		terms_heard = request.POST.get('words')
+
+		drink = None
+		if 'margarita' in terms_heard:
+			drink = 'margarita'
+		if 'gin' in terms_heard:
+			drink = 'gin and tonic'
+
+		if drink:
+			os.system('say I think you asked me for a %s' % drink)
+	return render(
+    	request,
+    	'bar.html')
+
 def bar(request):
 	ingredients = Ingredient.objects.all()
 	drinks = Drink.objects.filter()
+
+	liquor = ['Vodka', 'Orange juice', 'Gin', 'Grenadine', 'Pineapple juice', 
+	'Triple sec', 'Amaretto', 'Lemon juice', 'Tequila', 'Cranberry juice']
+
+	extras = ['Ice', 'Maraschino cherry', 'Cherry', 'Lemon', 'Lemon peel',
+		'Lemon vodka', 'Salt', 'Cherries', 'Celery salt', 'Orange vodka', 'Almond',
+		'Raspberry vodka', 'Pear',
+	 'Soda water', 'Tonic water']
+
+	liquor = [l.lower() for l in liquor]
+	extras = [e.lower() for e in extras]
+
+	x = set()
+
+	total = 0
+	for drink in drinks:
+		can_serve = True
+		for ing in drink.ingredients.all():
+			if ing.name.lower() not in liquor:
+				if ing.name.lower() not in extras:
+					x.add(ing.name)
+					can_serve = False
+					break
+		if can_serve:
+			print drink,'|',
+			total += 1
+
+	print '\n %s' % total
+	print x
+
+
+	# freq = {}
+	# for drink in drinks:
+	# 	for ing in drink.ingredients.all():
+	# 		freq[ing] = freq.get(ing, 0) + 1
+
+	# from operator import itemgetter
+	# for a,b in sorted(freq.iteritems(), key=itemgetter(1), reverse=True)[:50]:
+	# 	print a,b
+
 	return render(
     	request,
     	'bar.html',

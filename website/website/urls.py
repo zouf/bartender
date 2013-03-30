@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 
     url(r'^load', barviews.load, name='load'),
     url(r'^bar', barviews.bar, name='bar'),
+    url(r'^order_drink', barviews.order_drink, name='order_drink'),
 )
 
 urlpatterns += staticfiles_urlpatterns()
