@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import os, operator, json                         
 from django.http import HttpResponse
 import urllib2
+import urllib
 
 available_ingredients = [
 	'Whiskey',
@@ -27,7 +28,7 @@ liquor_dict = {
 def mix_drink(request):
 	for valve_id, amount in request.POST.items():
 		os.system('/home/valve-control/dispense.rb %s %s' % (valve_id, amount))
-
+	return HttpResponse(json.dumps({'result':'Enjoy your drink!'}), mimetype="application/json")
 
 @csrf_exempt
 def make_drink(request):
@@ -46,7 +47,7 @@ def make_drink(request):
 			amount = amount_text.replace('ounce', '')
 			valve_id = liquor_dict[ifd.ingredient.name]
 			drink_data += [(valve_id, amount)]
-			urllib2.open('http://10.0.0.106/mix_drink', urllib.urlencode(drink_data))
+			urllib2.urlopen('http://192.168.2.2/mix_drink', urllib.urlencode(drink_data))
 
 		os.system('say %s needs %s of %s' % (ifd.drink.name, amount_text, ifd.ingredient.name))
 
@@ -59,7 +60,7 @@ def make_drink(request):
 				amount = amount_text.replace('ounce', '')
 				valve_id = liquor_dict[ifd.ingredient.name]
 				drink_data += [(valve_id, amount)]
-				urllib2.open('http://10.0.0.106/mix_drink', urllib.urlencode(drink_data))
+				urllib2.urlopen('http://194.168.2.2/mix_drink', urllib.urlencode(drink_data))
 
 			os.system('say and %s of %s' % (amount_text, ifd.ingredient.name))
 
