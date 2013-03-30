@@ -27,7 +27,7 @@ liquor_dict = {
 @csrf_exempt
 def mix_drink(request):
 	for valve_id, amount in request.POST.items():
-		os.system('/home/valve-control/dispense.rb %s %s' % (valve_id, amount))
+		os.system('/home/pi/valve-control/dispense.rb %s %s' % (valve_id, amount))
 	return HttpResponse(json.dumps({'result':'Enjoy your drink!'}), mimetype="application/json")
 
 @csrf_exempt
