@@ -3,6 +3,7 @@ from bartender.models import Drink, Ingredient, IngredientForDrink
 from django.views.decorators.csrf import csrf_exempt
 import os, operator, json                         
 from django.http import HttpResponse
+import urllib2
 
 available_ingredients = [
 	'Whiskey',
@@ -16,24 +17,53 @@ available_ingredients = [
 liquor = ['Vodka', 'Orange juice', 'Gin', 'Grenadine', 'Pineapple juice', 
 	'Triple sec', 'Amaretto', 'Lemon juice', 'Tequila', 'Cranberry juice']
 
+liquor_dict = {
+	'Orange juice': 1,
+	'Cranberry juice': 2
+}
+
+
+@csrf_exempt
+def mix_drink(request):
+	for valve_id, amount in request.POST.items():
+		os.system('/home/valve-control/dispense.rb %s %s' % (valve_id, amount))
+
 
 @csrf_exempt
 def make_drink(request):
-	if request.method == 'POST':
-		drink_name = request.POST.get('drink_name')
-		drink = Drink.objects.get(name=drink_name)
+	#drink_name = request.POST.get('drink_name')
+	drink_name = 'Cranberry Frog'
+	drink = Drink.objects.get(name=drink_name)
 
-		ifds = IngredientForDrink.objects.filter(drink=drink).all()
+	ifds = IngredientForDrink.objects.filter(drink=drink).all()
 
-		if len(ifds) >= 1:
-			ifd = ifds[0]
+	if len(ifds) >= 1:
+		ifd = ifds[0]
+		amount_text = ifd.amount.replace('oz', 'ounce')
+
+		drink_data = []
+		if liquor_dict.get(ifd.ingredient.name):
+			amount = amount_text.replace('ounce', '')
+			valve_id = liquor_dict[ifd.ingredient.name]
+			drink_data += [(valve_id, amount)]
+			urllib2.open('http://10.0.0.106/mix_drink', urllib.urlencode(drink_data))
+
+		os.system('say %s needs %s of %s' % (ifd.drink.name, amount_text, ifd.ingredient.name))
+
+	if len(ifds) > 1:
+		for ifd in ifds[1:]:
 			amount_text = ifd.amount.replace('oz', 'ounce')
-			os.system('say %s needs %s of %s' % (ifd.drink.name, amount_text, ifd.ingredient.name))
 
-		if len(ifds) > 1:
-			for ifd in ifds[1:]:
-				amount_text = ifd.amount.replace('oz', 'ounce')
-				os.system('say and %s of %s' % (amount_text, ifd.ingredient.name))
+			drink_data = []
+			if liquor_dict.get(ifd.ingredient.name):
+				amount = amount_text.replace('ounce', '')
+				valve_id = liquor_dict[ifd.ingredient.name]
+				drink_data += [(valve_id, amount)]
+				urllib2.open('http://10.0.0.106/mix_drink', urllib.urlencode(drink_data))
+
+			os.system('say and %s of %s' % (amount_text, ifd.ingredient.name))
+
+
 
 	return render(request,
     	'bar.html')

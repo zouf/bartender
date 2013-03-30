@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^order_drink', barviews.order_drink, name='order_drink'),
     url(r'^announce', barviews.announce, name='announce'),
     url(r'^make_drink', barviews.make_drink, name='make_drink'),    
+    url(r'^mix_drink', barviews.mix_drink, name='mix_drink'),        
 )
 
 urlpatterns += staticfiles_urlpatterns()
