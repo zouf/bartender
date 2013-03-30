@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<link rel="shortcut icon" href="../favicon.ico"> 
+        <link rel="stylesheet" type="text/css" href="css/imagesliderdemo.css" />
+        <link rel="stylesheet" type="text/css" href="css/imagesliderstyle.css" />
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300|Prata' rel='stylesheet' type='text/css' />
+		<script type="text/javascript" src="js/imageslider.modernizr.custom.26887.js"></script> 
+		<noscript>
+			<link rel="stylesheet" type="text/css" href="css/imageslidernoscript.css" />
+		</noscript>
+		<!--[if lte IE 8]><style>.main{display:none;} .support-note .note-ie{display:block;}</style><![endif]-->
+
+<!--	Block styles Code -->
+	    <!-- Our CSS stylesheet file -->
+        <link rel="stylesheet" href="css/blockstyles.css" />
+
+		<!-- Font Awesome Stylesheet -->
+		<link rel="stylesheet" href="font-awesome/css/font-awesome.css" />
+
+		<!-- Including Open Sans Condensed from Google Fonts -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700,300italic" />
+
+        <!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+
+
+
+
+        <link rel="shortcut icon" href="../favicon.ico"> 
+       <!-- <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.js"></script>
+        <![endif]-->
+
+
+<!--Voice Recognition Form -->
+<script type="text/javascript">
+  function transcribe(words) {
+    document.getElementById("speech").value = words;
+    document.getElementById("mic").value = "";
+    document.getElementById("speech").focus();
+  }
+</script>
+
+
+<!--LONG MENU CODE-->
+
+<script type="text/javascript" src="js/jquery-1.3.1.min.js"></script>
+
+<script type="text/javascript" src="js/longmenu.jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="js/longmenu.jquery.color.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function() {	
+
+	//Background color, mouseover and mouseout
+	var colorOver = '#31b8da';
+	var colorOut = '#1f1f1f';
+
+	//Padding, mouseover
+	var padLeft = '20px';
+	var padRight = '20px';
+	
+	//Default Padding
+	var defpadLeft = $('#menu li a').css('paddingLeft');
+	var defpadRight = $('#menu li a').css('paddingRight');
+		
+	//Animate the LI on mouse over, mouse out
+	$('#menu li').click(function () {	
+		//Make LI clickable
+		window.location = $(this).find('a').attr('href');
+		
+	}).mouseover(function (){
+		
+		//mouse over LI and look for A element for transition
+		$(this).find('a')
+		.animate( { paddingLeft: padLeft, paddingRight: padRight}, { queue:false, duration:100 } )
+		.animate( { backgroundColor: colorOver }, { queue:false, duration:200 });
+
+	}).mouseout(function () {
+	
+		//mouse oout LI and look for A element and discard the mouse over transition
+		$(this).find('a')
+		.animate( { paddingLeft: defpadLeft, paddingRight: defpadRight}, { queue:false, duration:100 } )
+		.animate( { backgroundColor: colorOut }, { queue:false, duration:200 });
+	});	
+	
+	//Scroll the menu on mouse move above the #sidebar layer
+	$('#sidebar').mousemove(function(e) {
+
+		//Sidebar Offset, Top value
+		var s_top = parseInt($('#sidebar').offset().top);		
+		
+		//Sidebar Offset, Bottom value
+		var s_bottom = parseInt($('#sidebar').height() + s_top);
+	
+		//Roughly calculate the height of the menu by multiply height of a single LI with the total of LIs
+		var mheight = parseInt($('#menu li').height() * $('#menu li').length);
+	
+		//I used this coordinate and offset values for debuggin
+		$('#debugging_mouse_axis').html("X Axis : " + e.pageX + " | Y Axis " + e.pageY);
+		$('#debugging_status').html(Math.round(((s_top - e.pageY)/100) * mheight / 2));
+			
+		//Calculate the top value
+		//This equation is not the perfect, but it 's very close	
+		var top_value = Math.round(( (s_top - e.pageY) /100) * mheight / 2);
+		
+		//Animate the #menu by chaging the top value
+		$('#menu').animate({top: top_value}, { queue:false, duration:500});
+	});
+
+	
+});
+	
+</script>
+
+<style>
+body {
+padding:0;
+margin:0 20px;
+}
+
+#sidebar {
+height:400px;
+overflow:hidden;
+position:relative;
+background-color:#eee;
+}	
+
+#menu {
+width:100%;
+list-style:none;
+padding:0;
+margin:0;
+top:0;
+position:relative;
+height:100%;
+width:300px;
+}
+
+#menu li {
+padding:10px 0;
+text-align:right;
+display:block;
+cursor:hand;
+cursor:pointer;
+}
+
+#menu li a {
+background:url() repeat #1f1f1f;
+
+color:#ddd;
+font-family:helvetica, arial, verdana;
+font-size:9px;
+font-weight:900;
+display:inline;
+padding:20px 8px 5px 20px;
+text-decoration:none;
+}
+
+#menu li span {
+font-family:georgia, arial;
+font-size:9px;
+color:#464646;
+}
+
+</style>
+
+
+<!--- LONG MENU CODE -->
+
+
+
+
+
+    </head>
+
+
+    <body>
+
+        <title>Liberty Bar</title>
+<center>
+<div class="example-wrapper-clearfix">
+			<h3> LIBERTY BAR </h3>
+</div>
+</center>
+				<div class="fs-slider" id="fs-slider">
+					
+					<figure>
+						<img src="images/image1.jpg" alt="image01" />
+						<figcaption>
+							<h3>Budweiser</h3>
+							<p>Beauty is in the eye of the beer holder.  </p>
+						</figcaption>
+					</figure>
+					
+					<figure>
+						<img src="images/image2.jpg" alt="image02" />
+						<figcaption>
+							<h3>Corona Extra</h3>
+							<p>Give me a woman who loves beer and I will conquer the world.</p>
+						</figcaption>
+					</figure>
+					
+					<figure>
+						<img src="images/image3.jpg" alt="image03" />
+						<figcaption>
+							<h3>Maker’s Mark</h3>
+							<p>They say some of my stars drink whiskey, but I have found that ones who drink milkshakes don't win many ball games. </p>
+						</figcaption>
+					</figure>
+					
+					<figure>
+						<img src="images/image4.jpg" alt="image04" />
+						<figcaption>
+							<h3>Imbroglio</h3>
+							<p>Scenester fixie pickled, shoreditch fugiat enim craft beer retro mustache.</p>
+						</figcaption>
+					</figure>
+					
+					<figure>
+						<img src="images/image5.jpg" alt="image05" />
+						<figcaption>
+							<h3>Lissome</h3>
+							<p>Aute sunt aliqua do sapiente. Food truck ut sustainable thundercats four loko.</p>
+						</figcaption>
+					</figure>
+					
+				</div><!-- /fs-slider -->
+	
+
+<!--<div id="debugging_mouse_axis"></div>
+<div id="debugging_status"></div> -->
+
+
+<div id="sidebar">
+
+<ul id="menu">
+<li><a href="#">MENU 1 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 2 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 3 <span> / 2007</span></a></li>
+<li><a href="#">MENU 4 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 5 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 6 <span> / 2007</span></a></li>
+<li><a href="#">MENU 7 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 8 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 9 <span> / 2007</span></a></li>
+<li><a href="#">MENU 10 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 11 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 12 <span> / 2007</span></a></li>
+<li><a href="#">MENU 13 <span> / 2007</span></a></li>
+<li><a href="#">SUPER LONG MENU MENU MENU MENU SIZE 14 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 15 <span> / 2007</span></a></li>
+<li><a href="#">MENU 16 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 17 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 18 <span> / 2007</span></a></li>
+<li><a href="#">MENU 19 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 20 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 21 <span> / 2007</span></a></li>
+<li><a href="#">MENU 22 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 5 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 23 <span> / 2007</span></a></li>
+<li><a href="#">MENU 24 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 25 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 26 <span> / 2007</span></a></li>
+<li><a href="#">MENU 27 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 28 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 29 <span> / 2007</span></a></li>
+<li><a href="#">MENU 30 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 31 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 32 <span> / 2007</span></a></li>
+<li><a href="#">MENU 33 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE 34 <span> / 2007</span></a></li>
+<li><a href="#">MENU SIZE LONG 35 <span> / 2007</span></a></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+<!--
+<textarea cols="50" id="speech"></textarea>
+<input id="mic"
+  onwebkitspeechchange="transcribe(this.value)" x-webkit-speech>
+
+        <div class="container">
+
+	<nav id="colorNav">
+			<ul>
+				<li class="green">
+					<a href="#" class="icon-home"></a>
+					<ul>
+						<li><a href="http://google.com/">Beer 1</a></li>
+						<li><a href="http://google.com/">Beer 2</a></li>
+						<li><a href="http:////google.com/">Beer 3</a></li>
+					</ul>
+				</li>
+				<li class="red">
+					<a href="#" class="icon-cogs"></a>
+					<ul>
+						<li><a href="#">Vodka 1</a></li>
+						<li><a href="#">Vodka 2</a></li>
+						<li><a href="#">Vodka 3</a></li>
+						<li><a href="#">Vodka 4</a></li>
+					</ul>
+				</li>
+				<li class="blue">
+					<a href="#" class="icon-twitter"></a>
+					<ul>
+						<li><a href="http://twitter.com/Tutorialzine">Specials 1</a></li>
+						<li><a href="http://www.facebook.com/Tutorialzine">Specials 2</a></li>
+					</ul>
+				</li>
+				<li class="yellow">
+					<a href="#" class="icon-beaker"></a>
+					<ul>
+						<li><a href="http://tutorialzine.com/tag/php/">Red Wine</a></li>
+						<li><a href="http://tutorialzine.com/tag/jquery/">White Wine</a></li>
+						<li><a href="http://tutorialzine.com/tag/css/">Custon Drink</a></li>
+						<li><a href="http://tutorialzine.com/category/tutorials/">Everything else</a></li>
+					</ul>
+				</li>
+				<li class="purple">
+					<a href="#" class="icon-envelope"></a>
+					<ul>
+						<li><a href="http://liberty.princeton.edu">Liberty Bar Contact Us</a></li>
+					</ul>
+				</li>
+			</ul>
+		</nav>
+
+
+->
+
+
+
+
+		
+
+
+
+
+<!-- Default Code ---------------------------------------------------------------------------------------------------------------------
+			<!-- Codrops top bar~~>
+            <div class="codrops-top clearfix">
+                <a href="http://tympanus.net/Development/PFold/">
+                    <strong>&laquo; Previous Demo: </strong>PFold: Paper-Like Unfolding Effect
+                </a>
+                <span class="right">
+                    <a href="http://tympanus.net/codrops/?p=11583">
+                        <strong>Back to the Codrops Article</strong>
+                    </a>
+                </span>
+            </div><!--/ Codrops top bar~~>
+			
+			<header>
+			
+				<h1>Basic <strong>Ready-to-Use CSS</strong> Styles</h1>
+				<h2>Some basic and useful style snippets</h2>
+			
+			</header>
+			
+			<section class="main">
+				<div class="example-wrapper clearfix">
+					<h3>Directional Box Shadows</h3>
+					<div class="demo-wrapper">
+						<div class="block-level drop-shadow top">Top</div>
+						<div class="block-level drop-shadow right">Right</div>
+						<div class="block-level drop-shadow bottom">Bottom</div>
+						<div class="block-level drop-shadow left">Left</div>
+					</div>
+					<pre class="code-wrapper"><code>.drop-shadow.top {
+  box-shadow: 0 -4px 2px -2px rgba(0,0,0,0.4);
+}
+
+.drop-shadow.right {
+  box-shadow: 4px 0 2px -2px rgba(0,0,0,0.4);
+}
+
+.drop-shadow.bottom {
+  box-shadow: 0 4px 2px -2px rgba(0,0,0,0.4);
+}
+
+.drop-shadow.left {
+  box-shadow: -4px 0 2px -2px rgba(0,0,0,0.4);
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Emphesized Box Shadows</h3>
+					<div class="demo-wrapper">
+						<div class="block-level emphasize-dark">Dark</div>
+						<div class="block-level emphasize-light">Light</div>
+						<div class="block-level emphasize-inset">Inset</div>
+						<div class="block-level emphasize-border">Border</div>
+					</div>
+					<pre class="code-wrapper"><code>.emphasize-dark {
+  box-shadow: 0 0 5px 2px rgba(0,0,0,.35);
+}
+
+.emphasize-light {
+  box-shadow: 0 0 0 10px rgba(255,255,255,.25);
+}
+
+.emphasize-inset {
+  box-shadow: inset 0 0 7px 4px rgba(255,255,255,.5);
+}
+
+.emphasize-border {
+  box-shadow: inset 0 0 0 7px rgba(255,255,255,.5);
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Embossed Box Shadows</h3>
+					<div class="demo-wrapper">
+						<div class="block-level embossed-light">Light</div>
+						<div class="block-level embossed-heavy">Heavy</div>
+					</div>
+					<pre class="code-wrapper"><code>.embossed-light {
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.embossed-heavy {
+  border: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 
+    inset 0 2px 3px rgba(255,255,255,0.3),
+    inset 0 -2px 3px rgba(0,0,0,0.3),
+    0 1px 1px rgba(255,255,255,0.9);
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Gradients</h3>
+					<div class="demo-wrapper">
+						<div class="block-level gradient-light-linear">Light Linear</div>
+						<div class="block-level gradient-dark-linear">Dark Linear</div>
+						<div class="block-level gradient-light-radial">Light Radial</div>
+						<div class="block-level gradient-dark-radial">Dark Radial</div>
+					</div>
+					<pre class="code-wrapper"><code>.gradient-light-linear {
+  background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+}
+
+.gradient-dark-linear {
+  background-image: linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,0));
+}
+
+.gradient-light-radial {
+  background-image: radial-gradient(center 0, circle farthest-corner, rgba(255,255,255,0.4), rgba(255,255,255,0));
+}
+
+.gradient-dark-radial {
+  background-image: radial-gradient(center 0, circle farthest-corner, rgba(0,0,0,0.15), rgba(0,0,0,0));
+}						
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Rounded Borders</h3>
+					<div class="demo-wrapper">
+						<div class="block-level light-rounded">Light</div>
+						<div class="block-level heavy-rounded">Heavy</div>
+						<div class="block-level full-rounded">Full</div>
+						<div class="block-level barrel-rounded">Barrel</div>
+					</div>
+					<pre class="code-wrapper"><code>.light-rounded {
+  border-radius: 3px;
+}
+
+.heavy-rounded {
+  border-radius: 8px;
+}
+
+.full-rounded {
+  border-radius: 50%;
+}
+
+.barrel-rounded {
+    border-radius: 20px/60px;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Background Inline Link</h3>
+					<div class="demo-wrapper">
+	        			<p>This is some dummy text to show an <a href="#" class="inline-link-1">inline link</a>.</p>
+	        		</div>
+					<pre class="code-wrapper"><code>.inline-link-1 {
+  display: inline-block;
+  margin: 0 0.2em;
+  padding: 3px;
+  background: #97CAF2;
+  border-radius: 2px;
+  transition: all 0.3s ease-out;
+
+  /* Font styles */
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+}
+
+.inline-link-1:hover   { background: #53A7EA; }
+.inline-link-1:active  { background: #C4E1F8; }
+.inline-link-1:visited { background: #F2BF97; }
+						</code>
+					</pre>
+            	</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Underlined Inline Link</h3>
+					<div class="demo-wrapper">
+						<p>This is some dummy text to show an <a href="#" class="inline-link-2">inline link</a>.</p>
+					</div>
+					<pre class="code-wrapper"><code>.inline-link-2 {
+  display: inline-block;
+  border-bottom: 1px dashed rgba(0,0,0,0.4);
+
+  /* Font styles */
+  text-decoration: none;
+  color: #777;
+}
+
+.inline-link-2:hover   { border-bottom-style: dotted; }
+.inline-link-2:active  { border-bottom-style: solid; }
+.inline-link-2:visited { border-bottom: 1px solid #97CAF2; }
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Triangle Inline Link</h3>
+					<div class="demo-wrapper">
+						<p>This is some dummy text to show an <a href="#" class="inline-link-3">inline link</a>.</p>
+					</div>
+					<pre class="code-wrapper"><code>.inline-link-3 {
+    display: inline-block;
+    position: relative;
+    padding-left: 6px;
+    /* Font styles */
+    text-decoration: none;
+    color: #6AB3EC;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.9);
+}
+
+.inline-link-3:hover {
+    color: #3C9CE7;
+}
+
+.inline-link-3:before {
+    content: "\25BA";
+    font-size: 80%;
+    display: inline-block;
+    padding-right: 3px;
+    pointer-events: none;
+}
+
+.inline-link-3:hover:before {
+    color: #F2BF97;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Metro Styles</h3>
+					<div class="demo-wrapper">
+						<a href="#" class="metro">Metro</a>
+						<a href="#" class="metro three-d">Metro</a>
+					</div>
+					<pre class="code-wrapper"><code>.metro {
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  background: #08C;
+
+  /* Font styles */
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.metro:hover { background: #0AF; }
+
+.metro.three-d {
+  position: relative;
+  box-shadow: 
+    1px 1px #53A7EA,
+    2px 2px #53A7EA,
+    3px 3px #53A7EA;
+  transition: all 0.1s ease-in;
+}
+
+.metro.three-d:active { 
+  box-shadow: none;
+  top: 3px;
+  left: 3px;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Bordered Link</h3>
+					<div class="demo-wrapper">
+						<a href="#" class="bordered-link">Bordered</a>
+					</div>
+					<pre class="code-wrapper"><code>.bordered-link {
+  display: inline-block;
+  padding: 8px;
+  border: 3px solid #FCB326;
+  border-radius: 6px;
+  box-shadow:
+    0 2px 1px rgba(0, 0, 0, 0.2), 
+    inset 0 2px 1px rgba(0, 0, 0, 0.2);
+    
+  /* Font styles */
+  text-decoration: none;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #222;
+}
+
+.bordered-link:hover  { border-color: #FDD68B; }
+.bordered-link:active { border-color: #FEE8BD; }
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Button Styles</h3>
+					<div class="demo-wrapper">
+						<a href="#" class="modern">Modern</a>
+						<a href="#" class="modern embossed-link">Modern embossed</a>
+						<a href="#" class="modern socle">Modern with socle</a>
+					</div>
+					<pre class="code-wrapper"><code>.modern {
+  display: inline-block;
+  margin: 10px;
+  padding: 8px 15px;
+  background: #B8ED01;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  transition: all 0.3s ease-out;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    0 2px 2px rgba(0,0,0,0.3),
+    0 0 4px 1px rgba(0,0,0,0.2);
+
+  /* Font styles */
+  text-decoration: none;
+  text-shadow: 0 1px rgba(255,255,255,0.7);
+}
+
+.modern:hover  { background: #C7FE0A; }
+
+.embossed-link {
+  box-shadow: 
+    inset 0 3px 2px rgba(255,255,255,.22), 
+    inset 0 -3px 2px rgba(0,0,0,.17), 
+    inset 0 20px 10px rgba(255,255,255,.12), 
+    0 0 4px 1px rgba(0,0,0,.1), 
+    0 3px 2px rgba(0,0,0,.2);
+}
+
+.modern.embossed-link {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.5),
+    0 2px 2px rgba(0,0,0,0.3),
+    0 0 4px 1px rgba(0,0,0,0.2),
+    inset 0 3px 2px rgba(255,255,255,.22), 
+    inset 0 -3px 2px rgba(0,0,0,.15), 
+    inset 0 20px 10px rgba(255,255,255,.12), 
+    0 0 4px 1px rgba(0,0,0,.1), 
+    0 3px 2px rgba(0,0,0,.2);
+}
+
+.modern.embossed-link:active {
+  box-shadow: 
+    inset 0 -2px 1px rgba(255,255,255,0.2),
+    inset 0 3px 2px rgba(0,0,0,0.12);
+}
+
+.socle {
+  position: relative;
+  z-index: 2;
+}
+
+.socle:after {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  border-radius: 6px;
+  box-shadow: 
+	inset 0 1px 0 rgba(0,0,0,0.1),
+	inset 0 -1px 0 rgba(255,255,255,0.7);
+  top: -6px; bottom: -6px;
+  right: -6px; left: -6px;
+  background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0));
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Simple Input</h3>
+					<div class="demo-wrapper">
+						<input type="text" class="simple-input" placeholder="Simple">
+					</div>
+					<pre class="code-wrapper"><code>.simple-input {
+  display: block;
+  padding: 5px;
+  border: 4px solid #F1B720;
+  border-radius: 5px;
+  color: #333;
+  transition: all 0.3s ease-out;
+}
+
+.simple-input:hover { border-radius: 8px; }
+.simple-input:focus { 
+  outline: none;
+  border-radius: 8px; 
+  border-color: #EBD292;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Mac Input</h3>
+					<div class="demo-wrapper">
+						<input type="text" class="mac" placeholder="Mac">
+					</div>
+					<pre class="code-wrapper"><code>.mac {
+  display: block;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 8px;
+  color: #333;
+  box-shadow: 
+    inset 0 2px 0 rgba(0,0,0,.2), 
+    0 0 4px rgba(0,0,0,0.1);
+}
+
+.mac:focus { 
+  outline: none;
+  box-shadow: 
+    inset 0 2px 0 rgba(0,0,0,.2), 
+    0 0 4px rgba(0,0,0,0.1),
+    0 0 5px 1px #51CBEE;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Depth &amp; Gradient Input</h3>
+					<div class="demo-wrapper">
+						<input type="text" class="depth" placeholder="Gradient">
+					</div>
+					<pre class="code-wrapper"><code>.depth {
+  display: block;
+  border: 1px solid silver;
+  background: linear-gradient(#eee, #fff);
+  transition: all 0.3s ease-out;
+  padding: 5px;
+  color: #555;
+}
+
+.depth:focus {
+  outline: none;
+  background-position: 0 -1.7em;
+}
+						</code>
+					</pre>
+				</div>
+
+				<div class="example-wrapper clearfix">
+					<h3>Only Line Input</h3>
+					<div class="demo-wrapper">
+						<input type="text" class="line" placeholder="Line">
+					</div>
+					<pre class="code-wrapper"><code>.line {
+  display: block;
+  border: none;
+  color: #333;
+  background: transparent;
+  border-bottom: 1px dotted black;
+  padding: 5px 2px 0 2px;
+}
+
+.line:focus { 
+  outline: none;
+  border-color: #51CBEE;
+}
+						</code>
+					</pre>
+        		</div>
+			</section>
+
+	-->
+        </div>
+
+		<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script> 
+		<script type="text/javascript" src="js/jquery.imgslider.js"></script>
+		<script type="text/javascript">
+			$(function() {
+
+				$( '#fs-slider' ).imgslider();
+
+			});
+		</script>
+
+
+
+
+    </body>
+</html>
