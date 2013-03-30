@@ -19,48 +19,67 @@ liquor = ['Vodka', 'Orange juice', 'Gin', 'Grenadine', 'Pineapple juice',
 	'Triple sec', 'Amaretto', 'Lemon juice', 'Tequila', 'Cranberry juice']
 
 liquor_dict = {
-	'Orange juice': 1,
-	'Cranberry juice': 2
+	'Cranberry juice': 1,
+	'Gin': 2,
+	'Kahlua': 3,
+	'Tequila': 4,
+	'Vodka': 5,
+	'Orange juice': 6,
+	'Tonic': 7,
+	'Coca-cola': 8,
+	'Pineapple juice': 9,
+	'Triple sec': 10
 }
 
 
 @csrf_exempt
 def mix_drink(request):
 	for valve_id, amount in request.POST.items():
-		os.system('/home/pi/valve-control/dispense.rb %s %s' % (valve_id, amount))
+		if amount:
+			os.system('/home/pi/valve-control/dispense.rb %s %s' % (valve_id, amount))
+		else:
+			os.system('/home/pi/valve-control/dispense.rb %s %s' % (valve_id, 2))			
 	return HttpResponse(json.dumps({'result':'Enjoy your drink!'}), mimetype="application/json")
 
 @csrf_exempt
 def make_drink(request):
-	#drink_name = request.POST.get('drink_name')
-	drink_name = 'Cranberry Frog'
+	drink_name = request.POST.get('drink_name')
 	drink = Drink.objects.get(name=drink_name)
 
 	ifds = IngredientForDrink.objects.filter(drink=drink).all()
+	print 'ingredients: %s' % ifds
 
 	if len(ifds) >= 1:
 		ifd = ifds[0]
 		amount_text = ifd.amount.replace('oz', 'ounce')
+		if not ifd.amount:
+			ifd.amount = ' 1 ounce '
+			ifd.save()
 
 		drink_data = []
-		if liquor_dict.get(ifd.ingredient.name):
+		if liquor_dict.get(ifd.ingredient.name.lower()):
 			amount = amount_text.replace('ounce', '')
 			valve_id = liquor_dict[ifd.ingredient.name]
 			drink_data += [(valve_id, amount)]
-			urllib2.urlopen('http://192.168.2.2/mix_drink', urllib.urlencode(drink_data))
+			print 'urllib %s %s' % ('http://192.168.2.3/mix_drink', str(drink_data))
+			urllib2.urlopen('http://192.168.2.3/mix_drink', urllib.urlencode(drink_data))
 
 		os.system('say %s needs %s of %s' % (ifd.drink.name, amount_text, ifd.ingredient.name))
 
 	if len(ifds) > 1:
 		for ifd in ifds[1:]:
 			amount_text = ifd.amount.replace('oz', 'ounce')
+			if not ifd.amount:
+				ifd.amount = ' 1 ounce '
+				ifd.save()
 
 			drink_data = []
-			if liquor_dict.get(ifd.ingredient.name):
+			if liquor_dict.get(ifd.ingredient.name.lower()):
 				amount = amount_text.replace('ounce', '')
 				valve_id = liquor_dict[ifd.ingredient.name]
 				drink_data += [(valve_id, amount)]
-				urllib2.urlopen('http://194.168.2.2/mix_drink', urllib.urlencode(drink_data))
+				print 'urllib %s %s' % ('http://192.168.2.3/mix_drink', str(drink_data))
+				urllib2.urlopen('http://194.168.2.3/mix_drink', urllib.urlencode(drink_data))
 
 			os.system('say and %s of %s' % (amount_text, ifd.ingredient.name))
 
