@@ -15,7 +15,9 @@
 
 
 html{
-	background:url('../img/background.jpg') #fefefe;
+	
+/*	background:url('../img/background.jpg') #fefefe; */
+	background:#fefefe;	
 	position:relative;
 }
 

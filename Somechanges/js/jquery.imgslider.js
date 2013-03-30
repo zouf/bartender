@@ -183,8 +183,7 @@
 
 	$.ImgSlider.defaults	= {
 		autoplay	: false,
-		interval	: 4000
-	};
+		interval	: 8000	};
 
 	$.ImgSlider.prototype	= {
 
