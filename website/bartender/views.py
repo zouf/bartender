@@ -5,6 +5,8 @@ import os, operator, json
 from django.http import HttpResponse
 import urllib2
 import urllib
+import Queue
+import threading
 
 available_ingredients = [
 	'Whiskey',
@@ -28,7 +30,11 @@ liquor_dict = {
 	'Tonic': 7,
 	'Coca-cola': 8,
 	'Pineapple juice': 9,
-	'Triple sec': 10
+	'Triple sec': 10,
+	'Tonic water': 7,
+	'Seltzer': 7,
+	'Coke': 8,
+	'Soda water': 7
 }
 
 
@@ -41,52 +47,87 @@ def mix_drink(request):
 			os.system('/home/pi/valve-control/dispense.rb %s %s' % (valve_id, 2))			
 	return HttpResponse(json.dumps({'result':'Enjoy your drink!'}), mimetype="application/json")
 
+
+def read_url(url, drink_data):
+	data = urllib2.urlopen(url, urllib.urlencode(drink_data)).read()
+	print('Fetched %s from %s' % (len(data), url))
+
+
 @csrf_exempt
 def make_drink(request):
 	drink_name = request.POST.get('drink_name')
-	drink = Drink.objects.get(name=drink_name)
-
-	ifds = IngredientForDrink.objects.filter(drink=drink).all()
+	threads = []
+	try:
+		drink = Drink.objects.get(name=drink_name)
+		ifds = IngredientForDrink.objects.filter(drink=drink).all()
+	except:
+		drink = None
+		ingredient = Ingredient.objects.get(name=drink_name.capitalize())
+		ifds = [IngredientForDrink.objects.filter(ingredient=ingredient).all()[0]]
 	print 'ingredients: %s' % ifds
 
 	if len(ifds) >= 1:
 		ifd = ifds[0]
-		amount_text = ifd.amount.replace('oz', 'ounce')
+		amount_text = ifd.amount.replace('oz', 'ounce').\
+		    replace('1/2', '.5').\
+		    replace('3/4', '.75').\
+		    replace('part', 'ounce').\
+		    replace('a', '').\
+		    replace('ounces', 'ounce').\
+		    replace('tblsp', 'ounce')
 		if not ifd.amount:
 			ifd.amount = ' 1 ounce '
 			ifd.save()
-
+			
 		drink_data = []
-		if liquor_dict.get(ifd.ingredient.name.lower()):
+		ing_name = ifd.ingredient.name.capitalize()
+		print 'looking up %s' % ing_name
+		if liquor_dict.get(ing_name):
 			amount = amount_text.replace('ounce', '')
 			valve_id = liquor_dict[ifd.ingredient.name]
-			drink_data += [(valve_id, amount)]
+			drink_data += [(valve_id, amount.rstrip())]
 			print 'urllib %s %s' % ('http://192.168.2.3/mix_drink', str(drink_data))
-			urllib2.urlopen('http://192.168.2.3/mix_drink', urllib.urlencode(drink_data))
-
+			url = 'http://192.168.2.3/mix_drink'
+			t = threading.Thread(target=read_url, args= (url,drink_data))
+			threads.append(t)
+			t.start()
 		os.system('say %s needs %s of %s' % (ifd.drink.name, amount_text, ifd.ingredient.name))
 
 	if len(ifds) > 1:
 		for ifd in ifds[1:]:
-			amount_text = ifd.amount.replace('oz', 'ounce')
+			amount_text = ifd.amount.lower().replace('oz', 'ounce').\
+			    replace('1/2', '.5').\
+			    replace('3/4', '.75').\
+			    replace('part', 'ounce').\
+			    replace('a', '').\
+			    replace('ounces', 'ounce').\
+			    replace('tblsp', 'ounce')
 			if not ifd.amount:
 				ifd.amount = ' 1 ounce '
 				ifd.save()
 
 			drink_data = []
-			if liquor_dict.get(ifd.ingredient.name.lower()):
+			ing_name = ifd.ingredient.name.capitalize()
+			print 'looking up %s' % ing_name
+			if liquor_dict.get(ing_name):
 				amount = amount_text.replace('ounce', '')
 				valve_id = liquor_dict[ifd.ingredient.name]
-				drink_data += [(valve_id, amount)]
+				drink_data += [(valve_id, amount.rstrip())]
 				print 'urllib %s %s' % ('http://192.168.2.3/mix_drink', str(drink_data))
-				urllib2.urlopen('http://194.168.2.3/mix_drink', urllib.urlencode(drink_data))
-
+				url = 'http://192.168.2.3/mix_drink'
+				t = threading.Thread(target=read_url, args= (url,drink_data))
+				threads.append(t)
+				t.start()
+				
 			os.system('say and %s of %s' % (amount_text, ifd.ingredient.name))
 
 
+  
+	for thr in threads:
+		thr.join()
 
-	return render(request,
-    	'bar.html')
+	from django.shortcuts import redirect
+	return redirect('/bar')
 
 
 @csrf_exempt
@@ -117,6 +158,13 @@ def order_drink(request):
 				for ing_term in ing.split():
 					if heard_term.lower() == ing_term.lower():
 						ingredients.add(ing)
+
+		for heard_term in terms_heard:
+			for ing_name in liquor_dict.keys():
+				if heard_term.lower() == ing_name.lower():
+					os.system('say %s coming up' % heard_term)
+					return HttpResponse(json.dumps({"drink": heard_term}), mimetype="application/json")
+					
 
 		if len(ingredients) > 0:
 			drink_name = ' and '.join(list(ingredients))
